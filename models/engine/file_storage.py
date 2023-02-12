@@ -40,6 +40,7 @@ class FileStorage():
         """sets in __objects the obj with key <obj class name>.id"""
         FileStorage.__objects['{}.{}'
                               .format(type(obj).__name__, obj.id)] = obj
+
     def save(self):
         """Serializes __objects to the JSON file"""
         obj_dict = FileStorage.__objects.copy()
@@ -49,10 +50,10 @@ class FileStorage():
 
     def reload(self):
         """Deserializes the JSON file to __objects."""
-        try:
+        if path.isfile(FileStorage.__file_path):
             with open(FileStorage.__file_path, "r") as f:
                 input = json.load(f)
                 for k, v in input.items():
                     FileStorage.__objects[k] = eval(v["__class__"])(**v)
-        except:
+        else:
             pass
